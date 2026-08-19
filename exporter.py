@@ -4,6 +4,8 @@ import pprint
 import json
 from dotenv import load_dotenv
 from prometheus_client import start_http_server
+from prometheus_client.core import GaugeMetricFamily, REGISTRY
+from prometheus_client.registry import Collector
 
 
 load_dotenv()
@@ -20,6 +22,22 @@ for device in data:
     device_temp = device['newest_events']['te']['val']
     print(device_name, device_temp)
 
+class QueueCollector(Collector):
+    def collect(self):
+        temperature = GaugeMetricFamily(
+                'room temperature',
+                'Current temperature recorded by the sensor',
+                labels=['name']
+        )
+    
+        for device in data:
+            device_name = device['name']
+            device_temp = device['newest_events']['te']['val']
+            temperature.add_metric([device_name], device_temp)
+        
+        yield temperature
+
+REGISTRY.register(QueueCollector())
 
 if __name__ == '__main__':
     start_http_server(8000)
