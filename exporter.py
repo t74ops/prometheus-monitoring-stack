@@ -22,12 +22,12 @@ for device in data:
     device_temp = device['newest_events']['te']['val']
     print(device_name, device_temp)
 
-class QueueCollector(Collector):
+class NatureRemoCollector(Collector):
     def collect(self):
         temperature = GaugeMetricFamily(
-                'room temperature',
-                'Current temperature recorded by the sensor',
-                labels=['name']
+                'nature_remo_temperature_celsius',
+                'Room temperature reported by Nature Remo Device',
+                labels=['device']
         )
     
         for device in data:
@@ -37,7 +37,7 @@ class QueueCollector(Collector):
         
         yield temperature
 
-REGISTRY.register(QueueCollector())
+REGISTRY.register(NatureRemoCollector())
 
 if __name__ == '__main__':
     start_http_server(8000)
