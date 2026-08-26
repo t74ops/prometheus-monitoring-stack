@@ -14,14 +14,6 @@ token = os.environ.get("NATURE_REMO_TOKEN")
 url = "https://api.nature.global/1/devices"
 headers = {'Authorization': 'Bearer ' + token}
 
-res = requests.get(url, headers=headers)
-data = res.json()
-
-for device in data:
-    device_name = device['name']
-    device_temp = device['newest_events']['te']['val']
-    print(device_name, device_temp)
-
 class NatureRemoCollector(Collector):
     def collect(self):
         temperature = GaugeMetricFamily(
@@ -29,11 +21,15 @@ class NatureRemoCollector(Collector):
                 'Room temperature reported by Nature Remo Device',
                 labels=['device']
         )
+
+        res = requests.get(url, headers=headers)
+        data = res.json()
     
         for device in data:
             device_name = device['name']
             device_temp = device['newest_events']['te']['val']
             temperature.add_metric([device_name], device_temp)
+            print(device_name, device_temp)
         
         yield temperature
 
