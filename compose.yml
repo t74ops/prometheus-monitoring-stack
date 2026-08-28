@@ -1,0 +1,22 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.33.3
+    ports:
+      - '9090:9090'
+    volumes:
+      - './prometheus.yml:/etc/prometheus/prometheus.yml'
+      - './prometheus/data:/prometheus'
+  nature-remo-exporter:
+    env_file:
+      - ./nature-remo-exporter/.env 
+    build: ./nature-remo-exporter
+    ports:
+      - '8000:8000'
+  grafana:
+    image: grafana/grafana:8.3.6
+    ports:
+      - '3000:3000'
+    volumes:
+      - './grafana/data:/var/lib/grafana'
+
+
