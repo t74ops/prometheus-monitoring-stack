@@ -151,7 +151,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "30s",
+  "refresh": "60s",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
@@ -190,7 +190,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},
